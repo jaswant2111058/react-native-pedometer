@@ -1,0 +1,38 @@
+{
+  "name": "PedometerExample",
+  "displayName": "PedometerExample",
+  "components": [
+    {
+      "appKey": "PedometerExample",
+      "displayName": "PedometerExample"
+    }
+  ],
+  "resources": {
+    "android": [
+      "dist/res",
+      "dist/main.android.jsbundle"
+    ],
+    "ios": [
+      "dist/assets",
+      "dist/main.ios.jsbundle"
+    ],
+    "macos": [
+      "dist/assets",
+      "dist/main.macos.jsbundle"
+    ],
+    "visionos": [
+      "dist/assets",
+      "dist/main.visionos.jsbundle"
+    ],
+    "windows": [
+      "dist/assets",
+      "dist/main.windows.bundle"
+    ]
+  },
+  "android": {
+    "package": "pedometer.example"
+  },
+  "ios": {
+    "bundleIdentifier": "pedometer.example"
+  }
+}
