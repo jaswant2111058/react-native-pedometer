@@ -1,22 +1,32 @@
-import { NativeModules, Platform } from 'react-native';
+import { NativeModules, NativeEventEmitter } from 'react-native';
 
-const LINKING_ERROR =
-  `The package 'react-native-pedometer' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo Go\n';
+const { ReactNativePedometer } = NativeModules;
 
-const Pedometer = NativeModules.Pedometer
-  ? NativeModules.Pedometer
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+const pedometerEventEmitter = new NativeEventEmitter(ReactNativePedometer);
 
-export function multiply(a: number, b: number): Promise<number> {
-  return Pedometer.multiply(a, b);
-}
+const startPedometerUpdates = async () => {
+  try {
+    await ReactNativePedometer.startPedometerUpdates();
+  } catch (error) {
+    console.error('Failed to start pedometer updates:', error);
+  }
+};
+
+const stopPedometerUpdates = () => {
+  ReactNativePedometer.stopPedometerUpdates();
+};
+
+// Subscribe to pedometer updates (assuming you send updates from native code)
+const subscribeToPedometerUpdates = (callback: any) => {
+  const subscription = pedometerEventEmitter.addListener(
+    'pedometerUpdate',
+    callback
+  );
+  return () => subscription.remove(); // Clean up the subscription
+};
+
+export {
+  startPedometerUpdates,
+  stopPedometerUpdates,
+  subscribeToPedometerUpdates,
+};
